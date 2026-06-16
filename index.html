@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering the CSS Box Model - Interactive Guide</title>
+    <!-- Google Fonts: Poppins & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>Understanding the CSS Box Model</h1>
+        <p>Interactive playground designed to help front-end developers master elements sizing, padding, borders,
+            margins, and sizing modes.</p>
+    </header>
+
+    <main class="container">
+        <!-- Controls Column (Left Column) -->
+        <div class="controls-column">
+            <!-- Box Model Controls Panel -->
+            <section class="panel">
+                <h2 class="panel-title">
+                    ⚙️ Controls
+                </h2>
+
+                <!-- Box Sizing Mode -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>box-sizing Mode</span>
+                        <a href="#sizing-details"
+                            style="color: var(--primary); text-decoration: none; font-size: 0.8rem;">What's this?</a>
+                    </div>
+                    <div class="sizing-toggle">
+                        <button id="btn-content-box" class="toggle-btn"
+                            onclick="setBoxSizing('content-box')">content-box</button>
+                        <button id="btn-border-box" class="toggle-btn active"
+                            onclick="setBoxSizing('border-box')">border-box</button>
+                    </div>
+                </div>
+
+                <!-- Dimensions -->
+                <div class="control-group" data-target="content">
+                    <div class="control-group-title">
+                        <span>Dimensions (Content)</span>
+                        <span class="badge badge-content">Content</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-width">Width</label>
+                        <input type="range" id="slider-width" min="100" max="300" value="180" oninput="updateValues()">
+                        <span class="value-display" id="val-width">180px</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-height">Height</label>
+                        <input type="range" id="slider-height" min="80" max="220" value="120" oninput="updateValues()">
+                        <span class="value-display" id="val-height">120px</span>
+                    </div>
+                </div>
+
+                <!-- Padding -->
+                <div class="control-group" data-target="padding">
+                    <div class="control-group-title">
+                        <span>Padding (Inner Space)</span>
+                        <span class="badge badge-padding">Padding</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-padding">All Sides</label>
+                        <input type="range" id="slider-padding" min="0" max="50" value="20" oninput="updateValues()">
+                        <span class="value-display" id="val-padding">20px</span>
+                    </div>
+                </div>
+
+                <!-- Border -->
+                <div class="control-group" data-target="border">
+                    <div class="control-group-title">
+                        <span>Border (Edge)</span>
+                        <span class="badge badge-border">Border</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-border">Width</label>
+                        <input type="range" id="slider-border" min="0" max="20" value="6" oninput="updateValues()">
+                        <span class="value-display" id="val-border">6px</span>
+                    </div>
+                </div>
+
+                <!-- Outline -->
+                <div class="control-group" data-target="outline">
+                    <div class="control-group-title">
+                        <span>Outline (Outer Edge)</span>
+                        <span class="badge badge-outline">Outline</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-outline">Width</label>
+                        <input type="range" id="slider-outline" min="0" max="20" value="4" oninput="updateValues()">
+                        <span class="value-display" id="val-outline">4px</span>
+                    </div>
+                </div>
+
+                <!-- Margin -->
+                <div class="control-group" data-target="margin">
+                    <div class="control-group-title">
+                        <span>Margin (Outer Space)</span>
+                        <span class="badge badge-margin">Margin</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-margin">All Sides</label>
+                        <input type="range" id="slider-margin" min="0" max="60" value="25" oninput="updateValues()">
+                        <span class="value-display" id="val-margin">25px</span>
+                    </div>
+                </div>
+
+                <!-- Calculated Size Details -->
+                <div class="calc-panel">
+                    <div class="calc-row">
+                        <span class="calc-label">Box Width (rendered):</span>
+                        <span class="calc-val" id="calc-width-breakdown">180px</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Box Height (rendered):</span>
+                        <span class="calc-val" id="calc-height-breakdown">120px</span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Outline (extra space):</span>
+                        <span class="calc-val" id="calc-outline-breakdown"><span
+                                style="color: var(--color-outline);">4px</span> <span
+                                style="color: var(--text-muted);">(0px
+                                added to layout)</span></span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Total Occupied Width:</span>
+                        <span class="calc-val" id="calc-total-width"><span>242px</span></span>
+                    </div>
+                    <div class="calc-row">
+                        <span class="calc-label">Total Occupied Height:</span>
+                        <span class="calc-val" id="calc-total-height"><span>182px</span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Typography & Font Basics Controls Panel -->
+            <section class="panel" style="margin-top: 1.5rem;">
+                <h2 class="panel-title">
+                    🔤 Typography & Font Basics
+                </h2>
+
+                <!-- Font Family -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>font-family</span>
+                        <span class="badge"
+                            style="background-color: rgba(34, 211, 238, 0.15); color: #22d3ee;">Family</span>
+                    </div>
+                    <select id="select-font-family" onchange="updateTypography()"
+                        style="width: 100%; background: var(--bg-base); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 12px; border-radius: var(--radius-md); font-family: 'Poppins', sans-serif; font-size: 0.9rem; outline: none; transition: border-color var(--transition-fast);">
+                        <option value="'Poppins', sans-serif">Sans-Serif (Poppins)</option>
+                        <option value="Georgia, serif">Serif (Georgia)</option>
+                        <option value="'Fira Code', monospace">Monospace (Fira Code)</option>
+                        <option value="cursive">Cursive (Brush Script)</option>
+                    </select>
+                </div>
+
+                <!-- Font Size -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>font-size</span>
+                        <span class="badge"
+                            style="background-color: rgba(168, 85, 247, 0.15); color: #c084fc;">Size</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-font-size">Size</label>
+                        <input type="range" id="slider-font-size" min="10" max="32" value="14"
+                            oninput="updateTypography()">
+                        <span class="value-display" id="val-font-size">14px</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
+                        Equivalent to <span id="val-font-size-rem"
+                            style="color: var(--text-secondary); font-weight: 500;">0.875rem</span> (1rem = 16px)
+                    </div>
+                </div>
+
+                <!-- Font Weight -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>font-weight</span>
+                        <span class="badge"
+                            style="background-color: rgba(236, 72, 153, 0.15); color: #f472b6;">Weight</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-font-weight">Weight</label>
+                        <input type="range" id="slider-font-weight" min="100" max="900" step="100" value="500"
+                            oninput="updateTypography()">
+                        <span class="value-display" id="val-font-weight">500</span>
+                    </div>
+                </div>
+
+                <!-- Font Style (Italic) -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>font-style</span>
+                        <span class="badge"
+                            style="background-color: rgba(234, 179, 8, 0.15); color: #facc15;">Style</span>
+                    </div>
+                    <div class="sizing-toggle">
+                        <button id="btn-style-normal" class="toggle-btn active"
+                            onclick="setFontStyle('normal')">normal</button>
+                        <button id="btn-style-italic" class="toggle-btn"
+                            onclick="setFontStyle('italic')">italic</button>
+                    </div>
+                </div>
+
+                <!-- Line Height -->
+                <div class="control-group">
+                    <div class="control-group-title">
+                        <span>line-height</span>
+                        <span class="badge"
+                            style="background-color: rgba(74, 222, 128, 0.15); color: #4ade80;">Height</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-line-height">Spacing</label>
+                        <input type="range" id="slider-line-height" min="1" max="2.5" step="0.1" value="1.4"
+                            oninput="updateTypography()">
+                        <span class="value-display" id="val-line-height">1.4</span>
+                    </div>
+                </div>
+
+                <!-- Letter Spacing -->
+                <div class="control-group" style="margin-bottom: 0;">
+                    <div class="control-group-title">
+                        <span>letter-spacing</span>
+                        <span class="badge"
+                            style="background-color: rgba(249, 115, 22, 0.15); color: #fb923c;">Spacing</span>
+                    </div>
+                    <div class="slider-container">
+                        <label class="slider-label" for="slider-letter-spacing">Tracking</label>
+                        <input type="range" id="slider-letter-spacing" min="-2" max="8" step="0.5" value="0"
+                            oninput="updateTypography()">
+                        <span class="value-display" id="val-letter-spacing">0px</span>
+                    </div>
+                </div>
+            </section>
+        </div> <!-- End Controls Column -->
+
+        <!-- Preview & Interactive Diagram (Right Column) -->
+        <section class="preview-container">
+            <!-- Live Preview Card -->
+            <div class="panel" style="padding: 1rem;">
+                <h2 class="panel-title" style="margin-bottom: 0.5rem; border-bottom: none;">
+                    🖥️ Live Preview
+                </h2>
+                <div class="visualizer-card">
+                    <div class="highlight-indicator" id="highlight-indicator">Hover control groups/diagram sections to
+                        highlight layers</div>
+
+                    <div class="sibling-layout">
+                        <!-- Sibling above to demonstrate margin push -->
+                        <div class="sibling-box" style="margin-bottom: 5px;">&lt;div class="sibling"&gt;Sibling Element
+                            Above&lt;/div&gt;</div>
+
+                        <!-- Styled target box -->
+                        <div class="demo-element-wrapper" id="demo-wrapper">
+                            <div class="demo-element" id="demo-element">
+                                <div class="demo-content-text" id="demo-content-text">
+                                    Content Area<br>
+                                    <span id="content-dimensions-text">180 x 120</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sibling below to demonstrate margin push -->
+                        <div class="sibling-box" style="margin-top: 5px;">&lt;div class="sibling"&gt;Sibling Element
+                            Below&lt;/div&gt;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DevTools Diagram Card -->
+            <div class="panel">
+                <h2 class="panel-title">
+                    🗺️ Visual Box Model (DevTools Representation)
+                </h2>
+
+                <div class="diagram-container">
+                    <div class="box-model-diagram">
+                        <!-- Margin Layer -->
+                        <div class="diagram-layer diagram-margin" data-layer="margin">
+                            <span class="diagram-label" style="color: var(--color-margin);">margin</span>
+                            <div id="diag-margin-top">25</div>
+
+                            <!-- Outline Layer -->
+                            <div class="diagram-layer diagram-outline" data-layer="outline">
+                                <span class="diagram-label" style="color: var(--color-outline);">outline</span>
+                                <div id="diag-outline-top">4</div>
+
+                                <!-- Border Layer -->
+                                <div class="diagram-layer diagram-border" data-layer="border">
+                                    <span class="diagram-label" style="color: var(--color-border);">border</span>
+                                    <div id="diag-border-top">6</div>
+
+                                    <!-- Padding Layer -->
+                                    <div class="diagram-layer diagram-padding" data-layer="padding">
+                                        <span class="diagram-label" style="color: var(--color-padding);">padding</span>
+                                        <div id="diag-padding-top">20</div>
+
+                                        <!-- Content Layer -->
+                                        <div class="diagram-layer diagram-content" data-layer="content">
+                                            <span class="diagram-label"
+                                                style="color: var(--color-content);">content</span>
+                                            <span id="diag-content-width">180</span> × <span
+                                                id="diag-content-height">120</span>
+                                        </div>
+
+                                        <div id="diag-padding-bottom">20</div>
+                                    </div>
+
+                                    <div id="diag-border-bottom">6</div>
+                                </div>
+
+                                <div id="diag-outline-bottom">4</div>
+                            </div>
+
+                            <div id="diag-margin-bottom">25</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Generated CSS Code -->
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCssCode()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copy CSS
+                    </button>
+                    <code class="code-block" id="css-output">.element {
+  box-sizing: border-box;
+  width: 180px;
+  height: 120px;
+  padding: 20px;
+  border: 6px solid #fbbf24;
+  margin: 25px;
+}</code>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Box Sizing Details -->
+    <section class="box-sizing-explanation" id="sizing-details">
+        <h2
+            style="font-size: 1.75rem; text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ⚔️ Sizing Duel: content-box vs border-box
+        </h2>
+        <div class="explanation-grid">
+            <div class="explanation-card">
+                <h3><code>box-sizing: content-box</code></h3>
+                <p>This is the <strong>default browser behavior</strong>. Width and height properties specify
+                    <em>only</em> the inner content box dimension. Any padding or borders are added to the outer
+                    dimensions.
+                </p>
+                <ul>
+                    <li><strong>Formula:</strong> Actual rendered size = Specified size + Padding + Border</li>
+                    <li><strong>Problem:</strong> Makes styling layouts unpredictable because adding padding or border
+                        breaks grid columns or custom widths!</li>
+                    <li><strong>Analogy:</strong> Buying a TV of width 50 inches, but when it arrives, the plastic
+                        frames (borders) and packaging add 5 extra inches on each side.</li>
+                </ul>
+            </div>
+            <div class="explanation-card">
+                <h3><code>box-sizing: border-box</code></h3>
+                <p>This is the <strong>industry standard/modern practice</strong>. The width and height properties
+                    specify the <em>entire box size</em> including content, padding, and border.</p>
+                <ul>
+                    <li><strong>Formula:</strong> Actual rendered size = Specified size (Padding and border shrink the
+                        inner content box size dynamically)</li>
+                    <li><strong>Benefit:</strong> Makes designing extremely predictable. If you specify
+                        <code>width: 300px</code>, it will always render as exactly <code>300px</code> wide.
+                    </li>
+                    <li><strong>Analogy:</strong> Buying a TV of width 50 inches, and the plastic frame is included
+                        inside that 50-inch measurement.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep Dive Cards -->
+    <section class="learn-grid">
+        <div class="learn-card margin-card" data-hover="margin">
+            <h3 class="learn-card-title"><span style="background-color: var(--color-margin);"></span>Margin</h3>
+            <p>The space <strong>outside</strong> the border. It separates this element from adjacent page components.
+                Margins do not have backgrounds (they are transparent) and do not respond to clicks.</p>
+        </div>
+        <div class="learn-card border-card" data-hover="border">
+            <h3 class="learn-card-title"><span style="background-color: var(--color-border);"></span>Border</h3>
+            <p>The perimeter around the padding. It serves as a visual separator. You can style its thickness, color,
+                and design (solid, dashed, dotted, double, etc.).</p>
+        </div>
+        <div class="learn-card outline-card" data-hover="outline">
+            <h3 class="learn-card-title"><span style="background-color: var(--color-outline);"></span>Outline</h3>
+            <p>A line drawn <strong>outside</strong> the border edge. Unlike borders, outlines do not take up space, do
+                not affect box sizing calculations, and can overlap other elements.</p>
+        </div>
+        <div class="learn-card padding-card" data-hover="padding">
+            <h3 class="learn-card-title"><span style="background-color: var(--color-padding);"></span>Padding</h3>
+            <p>The space <strong>inside</strong> the border. It protects the content from touching the border edges. It
+                inherits the background of the element and increases click targets.</p>
+        </div>
+        <div class="learn-card content-card" data-hover="content">
+            <h3 class="learn-card-title"><span style="background-color: var(--color-content);"></span>Content</h3>
+            <p>The actual core content (text, image, nested divs) that you put inside the tags. Its size is controlled
+                directly by the <code>width</code> and <code>height</code> properties.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>Interactive CSS Box Model Tutorial • Designed with ❤️ for future Web Developers</p>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
